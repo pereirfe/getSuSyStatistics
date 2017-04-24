@@ -17,8 +17,8 @@
 # e também um arquivo <subissoesTAREFA.csv> com todos os alunos que submeteram a tarefa
 
 import urllib2
-import ssl
 import sys
+import ssl
 
 #Encontra substring entre first e last
 def find_between( s, first, last ):
@@ -39,18 +39,18 @@ def getInfo(lab):
             url = 'https://susy.ic.unicamp.br:9999/' + grupo[0] + '/' + lab
             for turma in grupo[1:]:
                 resultado[turma] = {}
-
+                
                 urlTurma = url + '/relato' + turma + '.html'
 
+                gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)  # Only for gangstars
                 #Pega a página de submissões da turma em questão
-                context = ssl._create_unverified_context()
-                response = urllib2.urlopen(urlTurma, context=context)
+                response = urllib2.urlopen(urlTurma, context=gcontext)
                 html = response.read()
-
+                
                 #Testa se a página é vazia
                 if 'Página inexistente ou inacessível' in html:
                     print 'Não há submissões para a turma ',turma
-
+                    
                 else:
                     #Isola a tabela de submissoes
                     tabela = find_between(html,"<TABLE border=1>","</TABLE>")
@@ -83,7 +83,7 @@ def consolidaResultados(resultados):
             consolidado[turma]['corretas'] += resultados[turma][aluno]['corretas']
             consolidado[turma]['finais_corretas'] += resultados[turma][aluno]['final']
             consolidado[turma]['alunos'] += 1
-
+    
     return consolidado
 
 #Gera csv de saída com resultados das submissoes
@@ -96,11 +96,11 @@ def resultadosOutput(resultados,lab):
             for aluno in sorted(resultados[turma].keys()):
                 #Para cada aluno, imprime sua turma, usuario, total de submissoes, total de submissores corretas, e a nota final
                 #O calculo da nota final é: 10 se a última submissão foi correta, 0 caso contrário
-                arq.write(turma + ',' + aluno + ',' + str(resultados[turma][aluno]['total']) + ',' + str(resultado[turma][aluno]['corretas']) + ',' + str(resultado[turma][aluno]['final'] * 10) + '\n')
+                arq.write(turma + ',' + aluno + ',' + str(resultados[turma][aluno]['total']) + ',' + str(resultados[turma][aluno]['corretas']) + ',' + str(resultados[turma][aluno]['final'] * 10) + '\n')
 
-
-
-
+                
+                
+                
 #Imprime tabela consilidada
 def tabelaConsolidada(consolidado):
     print "---------------------------------------------------------------------------"
@@ -138,10 +138,26 @@ def tabelaConsolidada(consolidado):
                                                    total,
                                                    corretas,
                                                    finais_corretas,
-                                                   percentual,
+                                                   percentual, 
                                                    alunos)
     print "---------------------------------------------------------------------------"
 
+def getConsolidateJson(lab):
+    try:
+        #Coleta as informações
+        resultado = getInfo(lab)
+        #Gera arquivo com as notas
+        resultadosOutput(resultado,lab)
+        #Gera relatório consolidado
+        consolidado = consolidaResultados(resultado)
+        return consolidado
+        
+    except IndexError:
+        return 'Você deve inserir o numero do laboratorio.\nExemplo: python main.py 00'
+        
+    
+
+    
 if __name__ == '__main__':
     try:
         lab = sys.argv[1]
@@ -153,6 +169,7 @@ if __name__ == '__main__':
         consolidado = consolidaResultados(resultado)
         #Imprime tabela consolidada
         tabelaConsolidada(consolidado)
-
+        
     except IndexError:
         print 'Você deve inserir o numero do laboratorio.\nExemplo: python main.py 00'
+
