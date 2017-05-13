@@ -3,11 +3,17 @@
 import turmas
 import time
 import json
+import sys
 
-if __name__ == '__main__':
-    interval = int(raw_input('Select time interval in seconds:\n'))
-    lab = raw_input('Select laboratory:\n')
-    
+def main():
+    try:
+        interval = int(sys.argv[1])
+        #int(raw_input('Select time interval in seconds:\n'))
+        lab = sys.argv[2] #raw_input('Select laboratory:\n')
+    except IndexError:  
+        print "Use: overtime TIMEINSECONDS LAB"
+        return 0
+
     print 'Kill this program with Ctrl-D'
 
     while True:
@@ -21,5 +27,10 @@ if __name__ == '__main__':
             time.sleep(interval)
 
         except:
+            print "Unable to get data.. waiting.."
+            time.sleep(interval/5)
             pass
 
+
+if __name__ == '__main__':
+    main()

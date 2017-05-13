@@ -42,7 +42,8 @@ def getInfo(lab):
                 
                 urlTurma = url + '/relato' + turma + '.html'
 
-                gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)  # Only for gangstars
+                gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1) # gambiarra
+
                 #Pega a página de submissões da turma em questão
                 response = urllib2.urlopen(urlTurma, context=gcontext)
                 html = response.read()
