@@ -72,7 +72,8 @@ if __name__ == '__main__':
     p2 = ax.bar(ind, students, color='#3f5d7d', width=1)
     p3 = ax.bar(ind, correct, color='#deb0b0', width=1)
     
-    plt.legend((p1[0], p2[0], p3[0]), (u"Submissões", "Alunos", "Sub. Finais Corretas"))
+    plt.legend((p1[0], p2[0], p3[0]), (u"Submissões", "Alunos", "Sub. Finais Corretas"), 
+               loc='upper left')
     
     print xgraph_x
     print xgraph_str
@@ -80,10 +81,10 @@ if __name__ == '__main__':
     plt.xticks(xgraph_x, xgraph_str)
     
     plt.tight_layout()
-    str_turma = " turma " + tur
+    str_turma = "Turma " + tur
     if tur == "all":
-        str_turma = " todas as turmas"
-    plt.title(u"Laboratório " + lab + str_turma) 
+        str_turma = "Todas as turmas"
+    plt.title(u"Laboratório " + lab + " - "+ str_turma) 
     plt.savefig("graph"+tur+lab+".png")
     try:
         plt.show()
