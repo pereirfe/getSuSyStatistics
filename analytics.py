@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import json
 import matplotlib.pyplot as plt
@@ -71,7 +72,7 @@ if __name__ == '__main__':
     p2 = ax.bar(ind, students, color='#3f5d7d', width=1)
     p3 = ax.bar(ind, correct, color='#deb0b0', width=1)
     
-    plt.legend((p1[0], p2[0], p3[0]), ("Submissões", "Alunos", "Sub. Finais Corretas"))
+    plt.legend((p1[0], p2[0], p3[0]), (u"Submissões", "Alunos", "Sub. Finais Corretas"))
     
     print xgraph_x
     print xgraph_str
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     str_turma = " turma " + tur
     if tur == "all":
         str_turma = " todas as turmas"
-    plt.title("Laboratório " + lab + str_turma) 
+    plt.title(u"Laboratório " + lab + str_turma) 
     plt.savefig("graph"+tur+lab+".png")
     try:
         plt.show()
